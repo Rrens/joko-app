@@ -34,7 +34,7 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $item->name }}</td>
                                                 <td>{{ $item->category[0]->name }}</td>
-                                                <td>{{ rupiah_format($item->price) }}</td>
+                                                <td>{{ $item->price }}</td>
                                                 <td>{{ $item->quantity }}</td>
                                                 <td>
                                                     <button class="btn btn-outline-warning rounded-pill"
