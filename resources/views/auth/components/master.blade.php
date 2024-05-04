@@ -20,8 +20,6 @@
             <div class="auth-logo">
                 <a href="#"><img src="{{ asset('assets/images/logo/logo.svg') }}" alt="Logo"></a>
             </div>
-
-
         </div>
     </div>
 </body>

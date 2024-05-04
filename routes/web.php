@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::redirect('cok', 'master/user');
+
 Route::group([
     'prefix' => 'master'
 ], function () {
@@ -22,12 +24,18 @@ Route::group([
         'prefix' => 'user'
     ], function () {
         Route::get('', [MasterUserController::class, 'index'])->name('master.user.index');
+        Route::post('', [MasterUserController::class, 'store'])->name('master.user.store');
+        Route::post('update', [MasterUserController::class, 'update'])->name('master.user.update');
+        Route::post('delete', [MasterUserController::class, 'delete'])->name('master.user.delete');
     });
 
     Route::group([
         'prefix' => 'product'
     ], function () {
         Route::get('', [MasterProductController::class, 'index'])->name('master.product.index');
+        Route::post('', [MasterProductController::class, 'store'])->name('master.product.store');
+        Route::post('update', [MasterProductController::class, 'update'])->name('master.product.update');
+        Route::post('delete', [MasterProductController::class, 'delete'])->name('master.product.delete');
     });
 });
 

@@ -27,7 +27,7 @@
         }
     </style>
 
-    @stack('head')
+    @stack('css')
 </head>
 
 <body>
@@ -54,13 +54,7 @@
 
 
     <script src="{{ asset('assets/js/app.js') }}"></script>
-
-
-
-    <!-- Need: Apexcharts -->
-    <script src="{{ asset('assets/extensions/apexcharts/apexcharts.min.js') }}"></script>
-    <script src="{{ asset('assets/static/js/pages/dashboard.js') }}"></script>
-
+    @stack('js')
 </body>
 
 </html>
