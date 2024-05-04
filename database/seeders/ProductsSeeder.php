@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\ProductCategories;
 use App\Models\Products;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Arr;
 
 class ProductsSeeder extends Seeder
 {
@@ -229,9 +231,13 @@ class ProductsSeeder extends Seeder
             "CETHYL ALCOHOL 1 KG",
             "CAPSICUM EX AKAY 1 KG"
         ];
+
+        $count_product_categories = ProductCategories::count();
+
         $faker = \Faker\Factory::create();
         foreach ($product as $item) {
             $data = new Products();
+            $data->categoryID = $faker->numberBetween(1, $count_product_categories);
             $data->name = $item;
             $data->price = $faker->randomFloat(2, 10000, 100000);
             $data->quantity = $faker->numberBetween(1, 1000);

@@ -55,6 +55,19 @@
                         <span>Master Barang</span>
                     </a>
                 </li>
+                <li class="sidebar-item {{ $active == 'platform' ? 'active' : '' }} ">
+                    <a href="{{ route('master.platform.index') }}" class='sidebar-link'>
+                        <i class="bi bi-boxes"></i>
+                        <span>Master Platform</span>
+                    </a>
+                </li>
+                <li class="sidebar-title">Transaction</li>
+                <li class="sidebar-item {{ $active == 'transaction' ? 'active' : '' }} ">
+                    <a href="{{ route('transaction.index') }}" class='sidebar-link'>
+                        <i class="bi bi-boxes"></i>
+                        <span>Transaction</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

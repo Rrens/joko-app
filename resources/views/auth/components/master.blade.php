@@ -14,12 +14,11 @@
 <body>
     @include('sweetalert::alert')
     <div id="auth">
-
-        @yield('container')
         <div id="auth-left">
             <div class="auth-logo">
-                <a href="#"><img src="{{ asset('assets/images/logo/logo.svg') }}" alt="Logo"></a>
+                <a href="{{ route('login') }}"><img src="{{ asset('assets/images/logo/logo.svg') }}" alt="Logo"></a>
             </div>
+            @yield('container')
         </div>
     </div>
 </body>

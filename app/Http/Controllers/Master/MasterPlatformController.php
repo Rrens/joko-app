@@ -3,37 +3,39 @@
 namespace App\Http\Controllers\Master;
 
 use App\Http\Controllers\Controller;
-use App\Models\ProductCategories;
-use App\Models\Products;
+use App\Models\Platform;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use RealRashid\SweetAlert\Facades\Alert;
 
-class MasterProductController extends Controller
+class MasterPlatformController extends Controller
 {
     public function index()
     {
-        $active = 'master-barang';
-        $data = Products::orderBy('created_at', 'DESC')->with('category')->get();
-        $categories = ProductCategories::all();
-        return view('website.pages.master.barang', compact('active', 'data', 'categories'));
+        $active = 'platform';
+        $data = Platform::all();
+        return view('website.pages.master.platform', compact('active', 'data'));
     }
 
     public function store(Request $request)
     {
+        $request['name'] = strtolower($request['name']);
         $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'price' => 'required|numeric',
-            'quantity' => "required|integer"
+            'name' => 'required'
         ]);
 
         if ($validator->fails()) {
             Alert::toast($validator->messages()->all(), 'error');
-            return back()->withInput();
+            return back();
+        }
+
+        if ($this->check_platform_empty($request->name)) {
+            Alert::toast('Platform Already Taken!', 'error');
+            return back();
         }
 
         unset($request['_token']);
-        $data = new Products();
+        $data = new Platform();
         $data->fill($request->all());
         $data->save();
 
@@ -43,21 +45,23 @@ class MasterProductController extends Controller
 
     public function update(Request $request)
     {
+        $request['name'] = strtolower($request['name']);
         $validator = Validator::make($request->all(), [
-            'id' => 'required|exists:products,id',
             'name' => 'required',
-            'price' => 'required|numeric',
-            'quantity' => "required|integer"
+            'id' => 'required|exists:platforms,id'
         ]);
 
         if ($validator->fails()) {
             Alert::toast($validator->messages()->all(), 'error');
-            return back()->withInput();
+            return back();
         }
 
-        unset($request['_token']);
-        $data = Products::findOrFail($request->id);
-        $data->update($request->all());
+        if ($this->check_platform_empty($request->name)) {
+            Alert::toast('Platform Already Taken!', 'error');
+            return back();
+        }
+
+        Platform::where('id', $request->id)->update(['name' => $request->name]);
 
         Alert::toast('Success Update Data', 'success');
         return back();
@@ -66,24 +70,27 @@ class MasterProductController extends Controller
     public function delete(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id' => 'required|exists:products,id',
+            'id' => 'required|exists:platforms,id'
         ]);
 
         if ($validator->fails()) {
             Alert::toast($validator->messages()->all(), 'error');
-            return back()->withInput();
+            return back();
         }
 
-        Products::where('id', $request->id)->delete();
+        Platform::where('id', $request->id)->delete();
 
         Alert::toast('Success Delete Data', 'success');
         return back();
     }
 
-    public function getPriceProduct($productID)
+    public function check_platform_empty($request)
     {
-        $data = Products::find($productID)->price;
+        $data_for_check = Platform::where('name', $request)->whereNull('deleted_at')->first();
+        if (!empty($data_for_check['name'])) {
+            return true;
+        }
 
-        return response()->json($data);
+        return false;
     }
 }

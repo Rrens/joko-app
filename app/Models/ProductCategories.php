@@ -6,30 +6,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Products extends Model
+class ProductCategories extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'products';
+    protected $table = 'product_categories';
     protected $primaryKey = 'id';
     protected $guarded = [];
 
     protected $fillable = [
-        'categoryID',
         'name',
-        'price',
-        'quantity',
         'created_at',
         'updated_at',
     ];
 
-    public function category()
+    public function product()
     {
-        return $this->hasMany(ProductCategories::class, 'id', 'categoryID');
-    }
-
-    public function transaction()
-    {
-        return $this->belongsTo(Transaction::class);
+        return $this->belongsTo(Products::class);
     }
 }

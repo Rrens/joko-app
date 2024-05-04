@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Master\MasterPlatformController;
 use App\Http\Controllers\Master\MasterProductController;
 use App\Http\Controllers\Master\MasterUserController;
+use App\Http\Controllers\Transaction\TransactionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,13 +39,33 @@ Route::group([
         Route::post('', [MasterProductController::class, 'store'])->name('master.product.store');
         Route::post('update', [MasterProductController::class, 'update'])->name('master.product.update');
         Route::post('delete', [MasterProductController::class, 'delete'])->name('master.product.delete');
+        Route::get('getPriceProduct/{productID}', [MasterProductController::class, 'getPriceProduct']);
     });
+
+    Route::group([
+        'prefix' => 'platform'
+    ], function () {
+        Route::get('', [MasterPlatformController::class, 'index'])->name('master.platform.index');
+        Route::post('', [MasterPlatformController::class, 'store'])->name('master.platform.store');
+        Route::post('update', [MasterPlatformController::class, 'update'])->name('master.platform.update');
+        Route::post('delete', [MasterPlatformController::class, 'delete'])->name('master.platform.delete');
+    });
+});
+
+Route::group([
+    'prefix' => 'transaction'
+], function () {
+    Route::get('', [TransactionController::class, 'input'])->name('transaction.index');
+    Route::get('data', [TransactionController::class, 'data'])->name('transaction.data');
+    Route::post('', [TransactionController::class, 'store'])->name('transaction.store');
+    Route::post('update', [TransactionController::class, 'update'])->name('transaction.update');
+    Route::post('delete', [TransactionController::class, 'delete'])->name('transaction.delete');
 });
 
 Route::group([
     'prefix' => 'auth'
 ], function () {
-    Route::get('login', function () {
-        return view('auth.pages.login');
-    });
+    Route::get('login', [LoginController::class, 'login'])->name('login');
+    Route::post('post-login', [LoginController::class, 'post_login'])->name('post-login');
+    Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 });

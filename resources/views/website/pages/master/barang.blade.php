@@ -22,7 +22,8 @@
                                 <table class="table table-striped" id="table1">
                                     <thead>
                                         <th>No</th>
-                                        <th>Nama</th>
+                                        <th>Name</th>
+                                        <th>Category</th>
                                         <th>Price</th>
                                         <th>Quantity</th>
                                         <th>Action</th>
@@ -32,6 +33,7 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ $item->name }}</td>
+                                                <td>{{ $item->category[0]->name }}</td>
                                                 <td>{{ rupiah_format($item->price) }}</td>
                                                 <td>{{ $item->quantity }}</td>
                                                 <td>
@@ -75,6 +77,16 @@
                             <label for="name">Name *</label>
                             <input type="text" name="name" value="{{ old('name') }}" class="form-control mt-3"
                                 required>
+                        </div>
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select name="categoryID" id="category" class="form-select">
+                                <option selected hidden>Choose Category...</option>
+                                @foreach ($categories as $row)
+                                    <option {{ old('categoryID') == $item->categoryID ? 'selected' : '' }}
+                                        value="{{ $row->id }}">{{ $row->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="row mt-4">
                             <div class="col-6">
@@ -125,6 +137,17 @@
                                 <input type="text" name="name"
                                     value="{{ !empty(old('name')) ? old('name') : $item->name }}"
                                     class="form-control mt-3" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="category">Category</label>
+                                <select name="categoryID" id="category" class="form-select">
+                                    <option selected hidden>Choose Category...</option>
+                                    @foreach ($categories as $row)
+                                        <option
+                                            {{ (old('categoryID') == $row->id ? 'selected' : $item->categoryID == $row->id) ? 'selected' : '' }}
+                                            value="{{ $row->id }}">{{ $row->name }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="row mt-4">
                                 <div class="col-6">
