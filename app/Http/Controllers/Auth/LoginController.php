@@ -38,7 +38,7 @@ class LoginController extends Controller
 
         if (!Auth::attempt($data)) {
             Alert::toast('Email or Password is wrong', 'error');
-            return redirect()->route('auth.login')->withInput();
+            return redirect()->route('login')->withInput();
         }
 
         return redirect()->route('master.product.index');
