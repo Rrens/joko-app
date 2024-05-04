@@ -18,7 +18,6 @@ class checkRole
         if (in_array($request->user()->roles, $roles)) {
             return $next($request);
         }
-        // dd(auth()->user()->roles);
         return abort(404);
     }
 }

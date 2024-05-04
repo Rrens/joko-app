@@ -16,6 +16,14 @@ class LoginController extends Controller
             return view('auth.pages.login');
         }
 
+        if (Auth::user()->roles == 'superadmin') {
+            return redirect()->route('master.user.index');
+        }
+
+        if (Auth::user()->roles == 'admin') {
+            return redirect()->route('master.product.index');
+        }
+
         return abort(404);
     }
 

@@ -27,15 +27,7 @@
                         alt="Not Found">
                     <h1 class="error-title">Not Found</h1>
                     <p class='fs-5 text-gray-600'>The page you are looking not found.</p>
-                    @if (auth()->user()->roles == 'superadmin')
-                        <a href="{{ route('master.user.index') }}" class="btn btn-lg btn-outline-primary mt-3">Go
-                            Home</a>
-                    @elseif(auth()->user()->roles == 'admin')
-                        <a href="{{ route('master.product.index') }}" class="btn btn-lg btn-outline-primary mt-3">Go
-                            Home</a>
-                    @else
-                        <a href="{{ route('login') }}" class="btn btn-lg btn-outline-primary mt-3">Go Home</a>
-                    @endif
+                    <a href="{{ route('login') }}" class="btn btn-lg btn-outline-primary mt-3">Go Back</a>
                 </div>
             </div>
         </div>
