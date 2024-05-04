@@ -43,12 +43,14 @@
         <div class="sidebar-menu">
             <ul class="menu">
                 <li class="sidebar-title">Master</li>
-                <li class="sidebar-item {{ $active == 'master-user' ? 'active' : '' }} ">
-                    <a href="{{ route('master.user.index') }}" class='sidebar-link'>
-                        <i class="bi bi-person"></i>
-                        <span>Master User</span>
-                    </a>
-                </li>
+                @if (auth()->user()->roles == 'superadmin')
+                    <li class="sidebar-item {{ $active == 'master-user' ? 'active' : '' }} ">
+                        <a href="{{ route('master.user.index') }}" class='sidebar-link'>
+                            <i class="bi bi-person"></i>
+                            <span>Master User</span>
+                        </a>
+                    </li>
+                @endif
                 <li class="sidebar-item {{ $active == 'master-barang' ? 'active' : '' }} ">
                     <a href="{{ route('master.product.index') }}" class='sidebar-link'>
                         <i class="bi bi-boxes"></i>
@@ -66,6 +68,12 @@
                     <a href="{{ route('transaction.index') }}" class='sidebar-link'>
                         <i class="bi bi-boxes"></i>
                         <span>Transaction</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="{{ route('logout') }}" class='sidebar-link'>
+                        <i class="bi bi-door-open"></i>
+                        <span>Logout</span>
                     </a>
                 </li>
             </ul>

@@ -21,10 +21,12 @@ use Illuminate\Support\Facades\Route;
 Route::redirect('cok', 'master/user');
 
 Route::group([
-    'prefix' => 'master'
+    'prefix' => 'master',
+    'middleware' => ['auth', 'role:admin,superadmin']
 ], function () {
     Route::group([
-        'prefix' => 'user'
+        'prefix' => 'user',
+        'middleware' => ['auth', 'role:superadmin']
     ], function () {
         Route::get('', [MasterUserController::class, 'index'])->name('master.user.index');
         Route::post('', [MasterUserController::class, 'store'])->name('master.user.store');
@@ -53,7 +55,8 @@ Route::group([
 });
 
 Route::group([
-    'prefix' => 'transaction'
+    'prefix' => 'transaction',
+    'middleware' => ['auth', 'role:admin,superadmin']
 ], function () {
     Route::get('', [TransactionController::class, 'input'])->name('transaction.index');
     Route::get('data', [TransactionController::class, 'data'])->name('transaction.data');
