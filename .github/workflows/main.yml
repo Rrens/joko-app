@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [testing-deploy]
+    branches: [main]
 name: 🚀 Deploy website on dev
 jobs:
   web-deploy:
