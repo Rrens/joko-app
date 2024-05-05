@@ -19,6 +19,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
+                            {{-- @dd($products[0]) --}}
                             @if ($transaction_active == 'data')
                                 <div class="card-header d-flex justify-content-between">
                                     <h4>Data Products</h4>
@@ -78,8 +79,7 @@
                                                         <option selected hidden>Choose Products...</option>
                                                         @foreach ($products as $item)
                                                             <option {{ old('productID') == $item->id ? 'selected' : '' }}
-                                                                value="{{ $item->id }}">
-                                                                {{ $item->name }}
+                                                                value="{{ $item->id }}">{{ $item->name }}
                                                             </option>
                                                         @endforeach
                                                     </select>
@@ -99,7 +99,8 @@
                                                         <option selected hidden>Choose Platforms...</option>
                                                         @foreach ($platforms as $item)
                                                             <option {{ old('platformID') == $item->id ? 'selected' : '' }}
-                                                                value="{{ $item->id }}">{{ $item->name }}</option>
+                                                                value="{{ $item->id }}">{{ $item->name }}
+                                                            </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
