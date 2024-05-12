@@ -25,7 +25,7 @@ class Products extends Model
 
     public function category()
     {
-        return $this->belongsTo(ProductCategories::class, 'categoryID', 'id');
+        return $this->hasMany(ProductCategories::class, 'id', 'categoryID');
     }
 
     public function transaction()
