@@ -22,7 +22,7 @@
                             {{-- @dd($products[0]) --}}
                             @if ($transaction_active == 'data')
                                 <div class="card-header d-flex justify-content-between">
-                                    <h4>Data Products</h4>
+                                    <h4>Transaction Data Today</h4>
                                     <p>Agent: {{ auth()->user()->name }}</p>
                                 </div>
                                 <div class="card-body table-responsive">
