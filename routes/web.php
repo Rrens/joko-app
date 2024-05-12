@@ -4,6 +4,9 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Master\MasterPlatformController;
 use App\Http\Controllers\Master\MasterProductController;
 use App\Http\Controllers\Master\MasterUserController;
+use App\Http\Controllers\report\transactionController as ReportTransactionController;
+use App\Http\Controllers\report\TransactionPerCategoryController;
+use App\Http\Controllers\report\TransactionPerPlatformController;
 use App\Http\Controllers\Transaction\TransactionController;
 use Illuminate\Support\Facades\Route;
 
@@ -63,6 +66,32 @@ Route::group([
     Route::post('', [TransactionController::class, 'store'])->name('transaction.store');
     Route::post('update', [TransactionController::class, 'update'])->name('transaction.update');
     Route::post('delete', [TransactionController::class, 'delete'])->name('transaction.delete');
+});
+
+Route::group([
+    'prefix' => 'report',
+    'middleware' => ['auth', 'role:superadmin']
+], function () {
+    Route::group([
+        'prefix' => 'total-report'
+    ], function () {
+        Route::get('', [ReportTransactionController::class, 'index'])->name('report.total');
+        Route::get('/{date}/{platform}/{category}', [ReportTransactionController::class, 'filter']);
+    });
+
+    Route::group([
+        'prefix' => 'platform',
+    ], function () {
+        Route::get('', [TransactionPerPlatformController::class, 'index'])->name('report.platform');
+        Route::get('/{month}/{year}', [TransactionPerPlatformController::class, 'filter']);
+    });
+
+    Route::group([
+        'prefix' => 'category',
+    ], function () {
+        Route::get('', [TransactionPerCategoryController::class, 'index'])->name('report.category');
+        Route::get('/{month}/{year}', [TransactionPerCategoryController::class, 'filter']);
+    });
 });
 
 Route::group([

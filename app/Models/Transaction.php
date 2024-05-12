@@ -29,6 +29,11 @@ class Transaction extends Model
         return $this->hasMany(Products::class, 'id', 'productID');
     }
 
+    public function productWithCategory()
+    {
+        return $this->belongsTo(Products::class, 'productID', 'id')->with('category');
+    }
+
     public function platform()
     {
         return $this->hasMany(Platform::class, 'id', 'platformID');
