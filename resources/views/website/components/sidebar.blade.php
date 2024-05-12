@@ -70,26 +70,26 @@
                         <span>Transaction</span>
                     </a>
                 </li>
-                <li class="sidebar-title">Report</li>
-                <li class="sidebar-item  has-sub">
-                    <a href="#" class="sidebar-link">
-                        <i class="bi bi-book-fill"></i>
-                        <span>Reports</span>
-                    </a>
-                    <ul class="submenu {{ $active == 'report' ? 'active' : '' }}" style="--submenu-height: 86px;">
-                        <li class="submenu-item  ">
-                            <a href="{{ route('report.total') }}" class="submenu-link">Transactions Report</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="{{ route('report.platform') }}" class="submenu-link">Platform</a>
-                        </li>
-                        <li class="submenu-item">
-                            <a href="{{ route('report.category') }}" class="submenu-link">Category</a>
-                        </li>
-                    </ul>
-
-
-                </li>
+                @if (auth()->user()->roles == 'superadmin')
+                    <li class="sidebar-title">Report</li>
+                    <li class="sidebar-item  has-sub">
+                        <a href="#" class="sidebar-link">
+                            <i class="bi bi-book-fill"></i>
+                            <span>Reports</span>
+                        </a>
+                        <ul class="submenu {{ $active == 'report' ? 'active' : '' }}" style="--submenu-height: 86px;">
+                            <li class="submenu-item  ">
+                                <a href="{{ route('report.total') }}" class="submenu-link">Transactions Report</a>
+                            </li>
+                            <li class="submenu-item">
+                                <a href="{{ route('report.platform') }}" class="submenu-link">Platform</a>
+                            </li>
+                            <li class="submenu-item">
+                                <a href="{{ route('report.category') }}" class="submenu-link">Category</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endif
                 <li class="sidebar-item">
                     <a href="{{ route('logout') }}" class='sidebar-link'>
                         <i class="bi bi-door-open"></i>
