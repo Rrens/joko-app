@@ -44,8 +44,8 @@
                                                     <td>{{ $item->product[0]->name }}</td>
                                                     <td>{{ $item->product[0]->category[0]->name }}</td>
                                                     <td>{{ $item->quantity }}</td>
-                                                    <td>{{ rupiah_format(round($item->product[0]->price)) }}</td>
-                                                    <td>{{ rupiah_format(round($item->total_price)) }}</td>
+                                                    <td>{{ round($item->product[0]->price) }}</td>
+                                                    <td>{{ round($item->total_price) }}</td>
                                                     <td>{{ $item->platform[0]->name }}</td>
                                                     <td>
                                                         <button class="btn btn-outline-warning rounded-pill"
