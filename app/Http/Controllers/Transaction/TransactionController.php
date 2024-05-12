@@ -64,7 +64,9 @@ class TransactionController extends Controller
         $active = 'transaction';
         $transaction_active = 'data';
 
-        $data = Transaction::whereDate('created_at', Carbon::today())->with('product', 'platform', 'user')->get();
+        $data = Transaction::whereDate('created_at', now()->today())
+            ->where('userID', Auth::user()->id)
+            ->with('product', 'platform', 'user')->get();
         $products = Products::all();
         $platforms = Platform::all();
 
