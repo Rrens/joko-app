@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\report;
 
+use App\Exports\TransactionPerCategoryExport;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TransactionPerCategoryController extends Controller
 {
@@ -84,5 +86,18 @@ class TransactionPerCategoryController extends Controller
             'month_year',
             'name_customer'
         ));
+    }
+
+    public function export_filter($date, $platform, $category)
+    {
+        $data = $this->transaction_data($date, $platform, $category)['transaction'];
+        return Excel::download(new TransactionPerCategoryExport($data), 'transaction-perCategory.xlsx');
+    }
+
+    public function export()
+    {
+        $data = $this->transaction_data()['transaction'];
+        // dd($data);
+        return Excel::download(new TransactionPerCategoryExport($data), 'transaction-perCategory.xlsx');
     }
 }

@@ -66,6 +66,8 @@ Route::group([
     ], function () {
         Route::get('', [ReportTransactionController::class, 'index'])->name('report.total');
         Route::get('/{date}/{platform}/{category}', [ReportTransactionController::class, 'filter']);
+        Route::get('export', [ReportTransactionController::class, 'export'])->name('report.export.all');
+        Route::get('export-filter/{date}/{platform}/{category}', [ReportTransactionController::class, 'export_filter'])->name('report.export.filter');
     });
 
     Route::group([
@@ -73,6 +75,8 @@ Route::group([
     ], function () {
         Route::get('', [TransactionPerPlatformController::class, 'index'])->name('report.platform');
         Route::get('/{month}/{year}', [TransactionPerPlatformController::class, 'filter']);
+        Route::get('export', [TransactionPerPlatformController::class, 'export'])->name('report.platform.export.all');
+        Route::get('export-filter/{date}/{platform}/{category}', [TransactionPerPlatformController::class, 'export_filter'])->name('report.platform.export.filter');
     });
 
     Route::group([
@@ -80,6 +84,8 @@ Route::group([
     ], function () {
         Route::get('', [TransactionPerCategoryController::class, 'index'])->name('report.category');
         Route::get('/{month}/{year}', [TransactionPerCategoryController::class, 'filter']);
+        Route::get('export', [TransactionPerCategoryController::class, 'export'])->name('report.category.export.all');
+        Route::get('export-filter/{date}/{platform}/{category}', [TransactionPerCategoryController::class, 'export_filter'])->name('report.category.export.filter');
     });
 });
 

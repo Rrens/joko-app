@@ -50,7 +50,8 @@
                                                     <td>{{ $item->quantity }}</td>
                                                     <td>{{ rupiah_format(round($item->product[0]->price)) }}</td>
                                                     <td>{{ rupiah_format(round($item->total_price)) }}</td>
-                                                    <td>{{ $item->platform[0]->name }}</td>
+                                                    <td>{{ !empty($item->platform[0]) ? $item->platform[0]->name : $item->platform_user[0]->name }}
+                                                    </td>
                                                     <td>
                                                         <button class="btn btn-outline-warning rounded-pill"
                                                             data-bs-toggle="modal"
@@ -80,21 +81,21 @@
                                                 <div class="form-group">
                                                     <label for="name_customer">Nama Customer</label>
                                                     <input type="text" class="form-control mt-3 p-2" name="name_customer"
-                                                        id="name_customer">
+                                                        value="{{ old('name_customer') }}" id="name_customer">
                                                 </div>
                                             </div>
                                             <div class="col-4">
                                                 <div class="form-group">
                                                     <label for="acc_number">Nomor Rekening</label>
                                                     <input type="number" class="form-control mt-3 p-2" name="acc_number"
-                                                        id="acc_number">
+                                                        value="{{ old('acc_number') }}" id="acc_number">
                                                 </div>
                                             </div>
                                             <div class="col-4">
                                                 <div class="form-group">
                                                     <label for="area">Daerah</label>
                                                     <input type="text" class="form-control mt-3 p-2" name="area"
-                                                        id="area">
+                                                        value="{{ old('area') }}" id="area">
                                                 </div>
                                             </div>
                                             <div class="col-12">
@@ -128,6 +129,7 @@
                                                                 value="{{ $item->id }}">{{ $item->name }}
                                                             </option>
                                                         @endforeach
+                                                        <option value="user">{{ auth()->user()->name }}</option>
                                                     </select>
                                                 </div>
                                             </div>

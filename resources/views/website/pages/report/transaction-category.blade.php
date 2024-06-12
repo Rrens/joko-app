@@ -12,8 +12,27 @@
                     <div class="col-9">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between">
-                                <h4>Transaction Data Per Category</h4>
-                                <p>Total: Rp {{ number_format($total_price) }}</p>
+                                <div class="flex-start d-flex align-items-center">
+                                    <h4>Transaction Data Per Category</h4>
+                                    @if (!empty($date_now) && !empty($platform) && !empty($category))
+                                        <a href="{{ route('report.category.export.filter', [
+                                            'date' => $date_now,
+                                            'platform' => $platform,
+                                            'category' => $category,
+                                        ]) }}"
+                                            class="btn btn-primary btn-sm" style="margin-left: 10px; margin-bottom: 5px;">
+                                            Export
+                                        </a>
+                                    @else
+                                        <a href="{{ route('report.category.export.all') }}" class="btn btn-primary btn-sm"
+                                            style="margin-left: 10px; margin-bottom: 5px;">
+                                            Export
+                                        </a>
+                                    @endif
+                                </div>
+                                <div class="flex-start">
+                                    <p>Total: Rp {{ number_format($total_price) }}</p>
+                                </div>
                             </div>
                             <div class="card-body table-responsive">
                                 <table class="table table-striped" id="table1">

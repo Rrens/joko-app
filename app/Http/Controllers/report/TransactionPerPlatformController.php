@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\report;
 
+use App\Exports\TransactionPerPlatformExport;
 use App\Http\Controllers\Controller;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class TransactionPerPlatformController extends Controller
 {
@@ -83,5 +85,17 @@ class TransactionPerPlatformController extends Controller
             'year',
             'name_customer'
         ));
+    }
+
+    public function export_filter($date, $platform, $category)
+    {
+        $data = $this->transaction_data($date, $platform, $category)['transaction'];
+        return Excel::download(new TransactionPerPlatformExport($data), 'transaction-perPlatform.xlsx');
+    }
+
+    public function export()
+    {
+        $data = $this->transaction_data()['transaction'];
+        return Excel::download(new TransactionPerPlatformExport($data), 'transaction-perPlatform.xlsx');
     }
 }

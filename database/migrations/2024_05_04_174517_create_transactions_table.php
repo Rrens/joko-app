@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreign('productID')->references('id')->on('products');
             $table->unsignedBigInteger('platformID')->nullable();
             $table->foreign('platformID')->references('id')->on('platforms');
+            $table->unsignedBigInteger('platformUser')->nullable();
+            $table->foreign('platformUser')->references('id')->on('users');
             $table->unsignedBigInteger('userID')->nullable();
             $table->foreign('userID')->references('id')->on('users');
             $table->double('quantity');

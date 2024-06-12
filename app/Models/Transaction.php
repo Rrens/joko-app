@@ -17,6 +17,7 @@ class Transaction extends Model
     protected $fillable = [
         'productID',
         'platformID',
+        'platformUser',
         'userID',
         'quantity',
         'total_price',
@@ -40,6 +41,11 @@ class Transaction extends Model
     public function platform()
     {
         return $this->hasMany(Platform::class, 'id', 'platformID');
+    }
+
+    public function platform_user()
+    {
+        return $this->hasMany(User::class, 'id', 'platformUser');
     }
 
     public function user()

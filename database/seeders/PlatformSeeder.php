@@ -23,6 +23,15 @@ class PlatformSeeder extends Seeder
         foreach ($data_platform as $item) {
             $data = new Platform();
             $data->name = $item;
+            if ($item == 'shopee') {
+                $data->admin_cost = 0.93;
+            }
+            if ($item == 'tokopedia') {
+                $data->admin_cost = 0.955;
+            }
+            if ($item == 'lazada') {
+                $data->admin_cost = 0.98;
+            }
             $data->save();
         }
     }

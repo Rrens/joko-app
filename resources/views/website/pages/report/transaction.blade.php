@@ -12,8 +12,27 @@
                     <div class="col-9">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between">
-                                <h4>Transaction Data</h4>
-                                <p>Total: Rp {{ number_format($total_price) }}</p>
+                                <div class="flex-start d-flex align-items-center">
+                                    <h4>Transaction Data</h4>
+                                    @if (!empty($date_now) && !empty($platform) && !empty($category))
+                                        <a href="{{ route('report.export.filter', [
+                                            'date' => $date_now,
+                                            'platform' => $platform,
+                                            'category' => $category,
+                                        ]) }}"
+                                            class="btn btn-primary btn-sm" style="margin-left: 10px; margin-bottom: 5px;">
+                                            Export
+                                        </a>
+                                    @else
+                                        <a href="{{ route('report.export.all') }}" class="btn btn-primary btn-sm"
+                                            style="margin-left: 10px; margin-bottom: 5px;">
+                                            Export
+                                        </a>
+                                    @endif
+                                </div>
+                                <div class="flex-end">
+                                    <p>Total: Rp {{ number_format($total_price) }}</p>
+                                </div>
                             </div>
                             <div class="card-body table-responsive">
                                 <table class="table table-striped" id="table1">
@@ -38,7 +57,8 @@
                                                 <td>{{ $item->quantity }}</td>
                                                 <td>{{ rupiah_format(round($item->product[0]->price)) }}</td>
                                                 <td>{{ rupiah_format(round($item->total_price)) }}</td>
-                                                <td>{{ $item->platform[0]->name }}</td>
+                                                <td>{{ !empty($item->platform[0]) ? $item->platform[0]->name : $item->platform_user[0]->name }}
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -55,7 +75,7 @@
                                 <div class="form-group mb-3">
                                     <label for="dateForm">Date:</label>
                                     <input type="date" name="date" id="dateForm" class="form-control mt-1"
-                                        value="{{ !empty($date_now) ? $date_now : '' }}">
+                                        value="{{ !empty($date_now) ? $date_now : 'null' }}">
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="platform">Platforms</label>
@@ -67,6 +87,9 @@
                                                 {{ !empty($platform) ? ($platform != null ? ($platform == $item->name ? 'selected' : '') : '') : '' }}
                                                 value="{{ $item->name }}">{{ ucwords($item->name) }}</option>
                                         @endforeach
+                                        <option value="user"
+                                            {{ !empty($platform) ? ($platform == 'user' ? 'selected' : '') : '' }}>
+                                            {{ auth()->user()->name }}</option>
                                     </select>
                                 </div>
                                 <div class="form-group mb-3">
@@ -118,7 +141,10 @@
             let categoryValue = $('#category').val()
             let platformValue = $('#platform').val()
 
+            if (dateValue == '') {
 
+                dateValue = null;
+            }
 
             let url = `/report/total-report/${dateValue}/${platformValue}/${categoryValue}`;
             // console.log(url)

@@ -16,6 +16,7 @@ class Platform extends Model
 
     protected $fillable = [
         'name',
+        'admin_cost',
         'created_at',
         'updated_at',
     ];

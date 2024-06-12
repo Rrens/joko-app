@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\report;
 
+use App\Exports\TransactionExport;
 use App\Http\Controllers\Controller;
 use App\Models\Platform;
 use App\Models\ProductCategories;
 use App\Models\Products;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class transactionController extends Controller
 {
@@ -33,12 +35,17 @@ class transactionController extends Controller
                 $q->where('name', $platform);
             });
         }
+        // dd($platform == 'user');
+        if ($platform == 'user') {
+            $query->orWhereNotNull('platformUser');
+        }
 
         if ($category != "null" && $category != null) {
             $query->whereHas('product.category', function ($q) use ($category) {
                 $q->where('name', $category);
             });
         }
+        // dd($query);
 
         $transaction = $query->with('product', 'platform', 'user')->get();
         $total_price = $transaction->sum('total_price');
@@ -86,5 +93,17 @@ class transactionController extends Controller
             'category',
             'total_price',
         ));
+    }
+
+    public function export_filter($date, $platform, $category)
+    {
+        $data = $this->transaction_data($date, $platform, $category)['transaction'];
+        return Excel::download(new TransactionExport($data), 'transaction.xlsx');
+    }
+
+    public function export()
+    {
+        $data = $this->transaction_data()['transaction'];
+        return Excel::download(new TransactionExport($data), 'transaction.xlsx');
     }
 }

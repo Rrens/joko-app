@@ -23,6 +23,7 @@
                                     <thead>
                                         <th>No</th>
                                         <th>Name</th>
+                                        <th>Admin Cost</th>
                                         <th>Action</th>
                                     </thead>
                                     <tbody>
@@ -30,6 +31,7 @@
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{{ ucfirst($item->name) }}</td>
+                                                <td>{{ $item->admin_cost }}</td>
                                                 <td>
                                                     <button class="btn btn-outline-warning rounded-pill"
                                                         data-bs-toggle="modal"
@@ -72,6 +74,11 @@
                             <input type="text" name="name" value="{{ old('name') }}" class="form-control mt-3"
                                 required>
                         </div>
+                        <div class="form-group">
+                            <label for="admin_cost">Admin Cost *</label>
+                            <input type="text" name="admin_cost" value="{{ old('admin_cost') }}"
+                                class="form-control mt-3" required>
+                        </div>
                         <small class="text-muted mb-3">* (required)</small>
                         <div class="d-flex justify-content-end align-items-center">
                             <button type="button" class="btn btn-secondary" style="margin-right: 5px;"
@@ -106,6 +113,12 @@
                                 <input type="text" name="name"
                                     value="{{ !empty(old('name')) ? old('name') : $item->name }}" class="form-control mt-3"
                                     required>
+                            </div>
+                            <div class="form-group">
+                                <label for="admin_cost">Admin Cost *</label>
+                                <input type="text" name="admin_cost"
+                                    value="{{ !empty(old('admin_cost')) ? old('admin_cost') : $item->admin_cost }}"
+                                    class="form-control mt-3" required>
                             </div>
                             <div class="d-flex justify-content-end align-items-center">
                                 <button type="button" class="btn btn-secondary" style="margin-right: 5px;"
