@@ -10,17 +10,6 @@ use App\Http\Controllers\report\TransactionPerPlatformController;
 use App\Http\Controllers\Transaction\TransactionController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "web" middleware group. Make something great!
-|
-*/
-
 Route::redirect('cok', 'master/user');
 
 Route::group([
@@ -101,3 +90,5 @@ Route::group([
     Route::post('post-login', [LoginController::class, 'post_login'])->name('post-login');
     Route::get('logout', [LoginController::class, 'logout'])->name('logout');
 });
+
+Route::get('check-stock/{productID}', [MasterProductController::class, 'check_stock']);

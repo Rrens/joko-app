@@ -11,6 +11,7 @@ class TransactionPerPlatformController extends Controller
     public function transaction_data($month = null, $year = null)
     {
         $query = Transaction::query();
+        $query_customer = Transaction::query();
 
         if ($month != "null" && $month != null && $year != "null" && $year != null) {
             $query->where(function ($q) use ($month, $year) {
@@ -35,16 +36,20 @@ class TransactionPerPlatformController extends Controller
             });
         }
 
+
         $transaction = $query->selectRaw('*, SUM(total_price) as total_price')
             ->with('product', 'platform', 'user')
             ->groupBy('platformID')
             ->get();
 
+        $name_customer = $query_customer->selectRaw('platformID, name_customer, acc_number, area')->get();
+
         $total_price = $transaction->sum('total_price');
 
         return [
             'transaction' => $transaction,
-            'total_price' => $total_price
+            'total_price' => $total_price,
+            'customer' => $name_customer
         ];
     }
 
@@ -54,7 +59,13 @@ class TransactionPerPlatformController extends Controller
 
         $data = $this->transaction_data()['transaction'];
         $total_price = $this->transaction_data()['total_price'];
-        return view('website.pages.report.transaction-platform', compact('active', 'data', 'total_price'));
+        $name_customer = $this->transaction_data()['customer'];
+        return view('website.pages.report.transaction-platform', compact(
+            'active',
+            'data',
+            'total_price',
+            'name_customer'
+        ));
     }
 
     public function filter($month, $year)
@@ -63,12 +74,14 @@ class TransactionPerPlatformController extends Controller
 
         $data = $this->transaction_data($month, $year)['transaction'];
         $total_price = $this->transaction_data($month, $year)['total_price'];
+        $name_customer = $this->transaction_data()['customer'];
         return view('website.pages.report.transaction-platform', compact(
             'active',
             'data',
             'total_price',
             'month',
             'year',
+            'name_customer'
         ));
     }
 }

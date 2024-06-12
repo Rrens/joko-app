@@ -20,6 +20,9 @@ class Transaction extends Model
         'userID',
         'quantity',
         'total_price',
+        'name_customer',
+        'acc_number',
+        'area',
         'created_at',
         'updated_at',
     ];

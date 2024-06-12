@@ -11,6 +11,7 @@ class TransactionPerCategoryController extends Controller
     public function transaction_data($month = null, $year = null)
     {
         $query = Transaction::query()->join('products', 'transactions.productID', '=', 'products.id');
+        $query_customer = Transaction::query();
 
         if ($month != "null" && $month != null && $year != "null" && $year != null) {
             $query->where(function ($q) use ($month, $year) {
@@ -39,11 +40,17 @@ class TransactionPerCategoryController extends Controller
             ->groupBy('products.categoryID')
             ->get();
 
+        $name_customer = $query_customer->selectRaw('products.categoryID, transactions.name_customer, transactions.acc_number, transactions.area')
+            ->join('products', 'transactions.productID', '=', 'products.id')
+            ->get();
+        // dd($name_customer);
+
         $total_price = $transaction->sum('total_price');
 
         return [
             'transaction' => $transaction,
-            'total_price' => $total_price
+            'total_price' => $total_price,
+            'customer' => $name_customer
         ];
     }
 
@@ -53,7 +60,13 @@ class TransactionPerCategoryController extends Controller
 
         $data = $this->transaction_data()['transaction'];
         $total_price = $this->transaction_data()['total_price'];
-        return view('website.pages.report.transaction-platform', compact('active', 'data', 'total_price'));
+        $name_customer = $this->transaction_data()['customer'];
+        return view('website.pages.report.transaction-category', compact(
+            'active',
+            'data',
+            'total_price',
+            'name_customer'
+        ));
     }
 
     public function filter($month, $year)
@@ -63,12 +76,13 @@ class TransactionPerCategoryController extends Controller
         $data = $this->transaction_data($month, $year)['transaction'];
         $total_price = $this->transaction_data($month, $year)['total_price'];
         $month_year = $year . '-' . $month;
-        // dd($data);
+        $name_customer = $this->transaction_data()['customer'];
         return view('website.pages.report.transaction-platform', compact(
             'active',
             'data',
             'total_price',
             'month_year',
+            'name_customer'
         ));
     }
 }

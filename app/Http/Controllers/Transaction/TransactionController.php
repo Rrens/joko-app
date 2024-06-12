@@ -22,7 +22,12 @@ class TransactionController extends Controller
         $products = Products::all();
         $platforms = Platform::all();
 
-        return view('website.pages.transaction', compact('active', 'transaction_active', 'products', 'platforms'));
+        return view('website.pages.transaction', compact(
+            'active',
+            'transaction_active',
+            'products',
+            'platforms',
+        ));
     }
 
     public function store(Request $request)
@@ -30,7 +35,10 @@ class TransactionController extends Controller
         $validator = Validator::make($request->all(), [
             'platformID' => 'required|exists:platforms,id',
             'productID' => 'required|exists:products,id',
-            'quantity' => 'required|integer'
+            'quantity' => 'required|integer',
+            'name_customer' => 'required',
+            'acc_number' => 'required|numeric',
+            'area' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -50,6 +58,9 @@ class TransactionController extends Controller
         $data->quantity = $request->quantity;
         $data->total_price = $request->quantity * Products::find($request->productID)->price;
         $data->userID = Auth::user()->id;
+        $data->name_customer = $request->name_customer;
+        $data->acc_number = $request->acc_number;
+        $data->area = $request->area;
         $data->save();
 
         $product->quantity -= $request->quantity;
@@ -79,7 +90,10 @@ class TransactionController extends Controller
             'id' => 'required|exists:transactions,id',
             'platformID' => 'required|exists:platforms,id',
             'productID' => 'required|exists:products,id',
-            'quantity' => 'required|integer'
+            'quantity' => 'required|integer',
+            'name_customer' => 'required',
+            'acc_number' => 'required|numeric',
+            'area' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -108,6 +122,9 @@ class TransactionController extends Controller
         $data->quantity = $request->quantity;
         $data->total_price = $request->quantity * Products::find($request->productID)->price;
         $data->userID = Auth::user()->id;
+        $data->name_customer = $request->name_customer;
+        $data->acc_number = $request->acc_number;
+        $data->area = $request->area;
         $data->save();
 
         $product->quantity = $temp_quantity;

@@ -21,6 +21,9 @@ return new class extends Migration
             $table->foreign('userID')->references('id')->on('users');
             $table->double('quantity');
             $table->double('total_price');
+            $table->string('name_customer')->nullable();
+            $table->string('acc_number')->nullable();
+            $table->string('area')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -19,6 +19,7 @@
                                 <table class="table table-striped" id="table1">
                                     <thead>
                                         <th>No</th>
+                                        <th>Customer</th>
                                         <th>Name</th>
                                         <th>Category</th>
                                         <th>Quantity</th>
@@ -30,6 +31,8 @@
                                         @foreach ($data as $item)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
+                                                <td>{{ $item->name_customer . ' || ' . $item->acc_number . ' || ' . $item->area }}
+                                                </td>
                                                 <td>{{ $item->product[0]->name }}</td>
                                                 <td>{{ $item->product[0]->category[0]->name }}</td>
                                                 <td>{{ $item->quantity }}</td>

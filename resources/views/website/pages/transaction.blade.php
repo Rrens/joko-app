@@ -29,6 +29,7 @@
                                     <table class="table table-striped" id="table1">
                                         <thead>
                                             <th>No</th>
+                                            <th>Customer</th>
                                             <th>Name</th>
                                             <th>Category</th>
                                             <th>Quantity</th>
@@ -41,7 +42,10 @@
                                             @foreach ($data as $item)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $item->product[0]->name }}</td>
+                                                    <td>{{ $item->name_customer . ' || ' . $item->acc_number . ' || ' . $item->area }}
+                                                    </td>
+                                                    <td>{{ $item->product[0]->name }}
+                                                    </td>
                                                     <td>{{ $item->product[0]->category[0]->name }}</td>
                                                     <td>{{ $item->quantity }}</td>
                                                     <td>{{ rupiah_format(round($item->product[0]->price)) }}</td>
@@ -72,24 +76,46 @@
                                     <form action="{{ route('transaction.store') }}" method="post">
                                         @csrf
                                         <div class="row">
-                                            <div class="col-6">
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <label for="name_customer">Nama Customer</label>
+                                                    <input type="text" class="form-control mt-3 p-2" name="name_customer"
+                                                        id="name_customer">
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <label for="acc_number">Nomor Rekening</label>
+                                                    <input type="number" class="form-control mt-3 p-2" name="acc_number"
+                                                        id="acc_number">
+                                                </div>
+                                            </div>
+                                            <div class="col-4">
+                                                <div class="form-group">
+                                                    <label for="area">Daerah</label>
+                                                    <input type="text" class="form-control mt-3 p-2" name="area"
+                                                        id="area">
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
                                                 <div class="form-group">
                                                     <label for="name" class="mb-3">Product</label>
                                                     <select class="choices form-select" id="productID" name="productID">
                                                         <option selected hidden>Choose Products...</option>
                                                         @foreach ($products as $item)
                                                             <option {{ old('productID') == $item->id ? 'selected' : '' }}
-                                                                value="{{ $item->id }}">{{ $item->name }}
+                                                                value="{{ $item->id }}">
+                                                                {{ $item->name . ' || ' . $item->category[0]->name }}
                                                             </option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-6">
+                                            <div class="col-12">
                                                 <div class="form-group">
                                                     <label for="quantity">Quantity</label>
                                                     <input type="text" name="quantity" id="quantity"
-                                                        value="{{ old('quantity') }}" class="form-control mt-3 pb-3">
+                                                        value="{{ old('quantity') }}" class="form-control mt-3 p-2">
                                                 </div>
                                             </div>
                                             <div class="col-12">
@@ -251,9 +277,24 @@
             return 'Rp. ' + thousand;
         }
 
-        $('#quantity').on('change', function() {
+        $('#quantity').on('input', function() {
             let productID = $('#productID').val()
             let quantity = $('#quantity').val();
+
+            $.ajax({
+                url: `/check-stock/${productID}`,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    if (quantity > data) {
+                        alert('Quantity Melebihi Stok!')
+                        $('#quantity').val(data);
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log('Error:', textStatus, errorThrown);
+                }
+            })
 
             $.ajax({
                 url: `/master/product/getPriceProduct/${productID}`,
@@ -261,8 +302,6 @@
                 dataType: 'json',
                 success: function(data) {
                     let totalPrice = data * quantity;
-                    console.log(data)
-                    console.log(quantity)
                     $('#total_price').text(formatRupiah(totalPrice));
                 },
                 error: function(jqXHR, textStatus, errorThrown) {

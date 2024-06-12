@@ -86,4 +86,11 @@ class MasterProductController extends Controller
 
         return response()->json($data);
     }
+
+    public function check_stock($productID)
+    {
+        $data = Products::find($productID)->quantity;
+
+        return response()->json($data);
+    }
 }
