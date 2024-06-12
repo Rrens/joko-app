@@ -22,17 +22,25 @@ class TransactionController extends Controller
         $products = Products::all();
         $platforms = Platform::all();
 
-        return view('website.pages.transaction', compact('active', 'transaction_active', 'products', 'platforms'));
+        return view('website.pages.transaction', compact(
+            'active',
+            'transaction_active',
+            'products',
+            'platforms',
+        ));
     }
 
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'platformID' => 'required|exists:platforms,id',
+            'platformID' => 'nullable',
             'productID' => 'required|exists:products,id',
-            'quantity' => 'required|integer'
+            'quantity' => 'required|integer',
+            'name_customer' => 'required',
+            'acc_number' => 'required|numeric',
+            'area' => 'required',
         ]);
-
+        // dd($request->all());
         if ($validator->fails()) {
             Alert::toast($validator->messages()->all(), 'error');
             return back()->withInput();
@@ -45,11 +53,18 @@ class TransactionController extends Controller
         }
 
         $data = new Transaction();
+        if ($request->platformID != 'user') {
+            $data->platformID = $request->platformID;
+        } else {
+            $data->platformUser = Auth::user()->id;
+        }
         $data->productID = $request->productID;
-        $data->platformID = $request->platformID;
         $data->quantity = $request->quantity;
         $data->total_price = $request->quantity * Products::find($request->productID)->price;
         $data->userID = Auth::user()->id;
+        $data->name_customer = $request->name_customer;
+        $data->acc_number = $request->acc_number;
+        $data->area = $request->area;
         $data->save();
 
         $product->quantity -= $request->quantity;
@@ -76,10 +91,13 @@ class TransactionController extends Controller
     public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'id' => 'required|exists:transactions,id',
-            'platformID' => 'required|exists:platforms,id',
+            'id' => 'required',
+            'platformID' => 'nullable',
             'productID' => 'required|exists:products,id',
-            'quantity' => 'required|integer'
+            'quantity' => 'required|integer',
+            'name_customer' => 'required',
+            'acc_number' => 'required|numeric',
+            'area' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -103,11 +121,18 @@ class TransactionController extends Controller
         $temp_quantity = $product->quantity - $request->quantity;
 
         $data->productID = $request->productID;
-        $data->platformID = $request->platformID;
+        if (!empty($request->platformID)) {
+            $data->platformID = $request->platformID;
+        } else {
+            $data->platformUser = Auth::user()->id;
+        }
         $temp_quantity += $request->temp_quantity;
         $data->quantity = $request->quantity;
         $data->total_price = $request->quantity * Products::find($request->productID)->price;
         $data->userID = Auth::user()->id;
+        $data->name_customer = $request->name_customer;
+        $data->acc_number = $request->acc_number;
+        $data->area = $request->area;
         $data->save();
 
         $product->quantity = $temp_quantity;

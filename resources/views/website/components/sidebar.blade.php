@@ -72,7 +72,7 @@
                 </li>
                 @if (auth()->user()->roles == 'superadmin')
                     <li class="sidebar-title">Report</li>
-                    <li class="sidebar-item  has-sub">
+                    <li class="sidebar-item  has-sub {{ $active == 'report' ? 'active' : '' }}">
                         <a href="#" class="sidebar-link">
                             <i class="bi bi-book-fill"></i>
                             <span>Reports</span>

@@ -12,22 +12,49 @@
                     <div class="col-9">
                         <div class="card">
                             <div class="card-header d-flex justify-content-between">
-                                <h4>Transaction Data Per Category</h4>
-                                <p>Total: Rp {{ number_format($total_price) }}</p>
+                                <div class="flex-start d-flex align-items-center">
+                                    <h4>Transaction Data Per Category</h4>
+                                    @if (!empty($date_now) && !empty($platform) && !empty($category))
+                                        <a href="{{ route('report.category.export.filter', [
+                                            'date' => $date_now,
+                                            'platform' => $platform,
+                                            'category' => $category,
+                                        ]) }}"
+                                            class="btn btn-primary btn-sm" style="margin-left: 10px; margin-bottom: 5px;">
+                                            Export
+                                        </a>
+                                    @else
+                                        <a href="{{ route('report.category.export.all') }}" class="btn btn-primary btn-sm"
+                                            style="margin-left: 10px; margin-bottom: 5px;">
+                                            Export
+                                        </a>
+                                    @endif
+                                </div>
+                                <div class="flex-start">
+                                    <p>Total: Rp {{ number_format($total_price) }}</p>
+                                </div>
                             </div>
                             <div class="card-body table-responsive">
                                 <table class="table table-striped" id="table1">
                                     <thead>
                                         <th>No</th>
-                                        <th>Platform</th>
+                                        <th>Category</th>
                                         <th>Total Price</th>
+                                        <th>Detail</th>
                                     </thead>
                                     <tbody>
                                         @foreach ($data as $item)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $item->platform[0]->name }}</td>
+                                                <td>{{ $item->product[0]->category[0]->name }}</td>
                                                 <td>{{ rupiah_format(round($item->total_price)) }}</td>
+                                                <td>
+                                                    <button class="btn btn-outline-warning rounded-pill"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#modalDetail{{ $item->id }}">
+                                                        <i class="bi bi-info"></i>
+                                                    </button>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -55,6 +82,48 @@
             </div>
         </section>
     </div>
+
+    @foreach ($data as $item)
+        <div class="modal fade text-left" id="modalDetail{{ $item->id }}" tabindex="-1" role="dialog"
+            aria-labelledby="myModalLabel33" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel33">Detail {{ $item->product[0]->name }}</h4>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <i data-feather="x"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Nama Customer</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($name_customer->where('categoryID', $item->product[0]->categoryID) as $item)
+                                        <tr>
+                                            <td class="text-bold-500">
+                                                {{ $item->name_customer . ' || ' . $item->acc_number . ' || ' . $item->area }}
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-bs-dismiss="modal">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Close</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
 
 @endsection
 @push('css')
